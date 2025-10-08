@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Usuários - SELOEDU{% endblock %}
+
+{% block content %}
+  <div class="users-container">
+    <h2 class="users-header">Usuários</h2>
+
+    <p><a class="button-home no-underline" href="{{ url_for('users.create') }}">+ Novo usuário</a></p>
+
+    {% if usuarios %}
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Papel</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for u in usuarios %}
+            <tr>
+              <td>{{ u.id }}</td>
+              <td><a href="{{ url_for('users.show', user_id=u.id) }}">{{ u.nome }}</a></td>
+              <td>{{ u.email }}</td>
+              <td>{{ u.role }}</td>
+              <td class="actions">
+                <div class="action-group">
+                  <form action="{{ url_for('users.edit', user_id=u.id) }}" method="get" style="margin:0;display:inline-flex;">
+                    <button type="submit" class="btn-small">Editar</button>
+                  </form>
+                  <form action="{{ url_for('users.delete', user_id=u.id) }}" method="post" style="margin:0;display:inline-flex;">
+                    <button type="submit" class="btn-small">Excluir</button>
+                  </form>
+                </div>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p>Nenhum usuário cadastrado.</p>
+    {% endif %}
+  </div>
+{% endblock %}

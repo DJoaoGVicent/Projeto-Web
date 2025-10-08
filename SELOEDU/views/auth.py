@@ -1,7 +1,7 @@
 from flask import render_template, request, redirect, url_for, flash
 from flask_login import login_user, logout_user
-from models.user import User
-from models.extensions import db
+from models.users import User
+from extensions import db
 
 
 def login():

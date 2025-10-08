@@ -97,8 +97,8 @@ Autenticação de usuários na aplicação SELOEDU
 
 Descrição
 Configure o LoginManager no arquivo extensions.py e registre-o em app.py.
-Ajuste o modelo de usuário em models/user.py, implementando os métodos necessários para o Flask-Login.
-Crie/atualize as rotas em routes/auth.py (login, logout) e proteja as rotas de usuários em routes/user.py
+Ajuste o modelo de usuário em models/users.py, implementando os métodos necessários para o Flask-Login.
+Crie/atualize as rotas em routes/auth.py (login, logout) e proteja as rotas de usuários em routes/users.py
 Implemente a lógica correspondente nas views: views/auth.py (validar credenciais e chamar login_user/logout_user) e views/users.py (operações de usuários autenticados).
 Add em templates/auth/login.html com um formulário simples de autenticação(caso já tenha manter).
 Add os arquivos base,home e dashboard.html em templates
@@ -154,6 +154,53 @@ SELOEDU/
 
 ```
 Recife, 04 de Outubro de 2025
+
+---
+
+# 5 atividade-desenvolvimento-web
+```
+Atualização de estrutura e crud users seloedu
+
+Implementar as funcionalidades das páginas index.html, form.html e show.html, integrando-as com as respectivas rotas e lógicas de negócio.
+
+Para isso, devem ser realizadas as seguintes ações:
+Routes/: adicionar as rotas correspondentes (listagem, criação, edição e detalhamento) no arquivo users.py, conectando cada uma às funções da camada de views.
+Views/: implementar as funções responsáveis por processar os dados de usuários, realizar consultas e retornar o conteúdo renderizado.
+Templates/users/ (já disponibilizado): garantir que os templates index.html, form.html e show.html recebam os dados corretos e exibam as informações conforme o comportamento definido nas rotas e views.
+Estrutura atual do projeto
+seloedu/
+│
+├── routes/  
+│   └── users.py  
+├── models/  
+│   └── users.py
+│
+├── templates/
+│   ├── base.html    
+│   ├── dashboard.html            
+│   ├── home.html                
+│   │
+│   ├── auth/
+│   │   └── login.html            
+│   │
+│   ├── users/
+│   │   ├── index.html            
+│   │   ├── form.html            
+│   │   └── show.html  
+├── views/
+│   ├── auth.py                  
+│   └── users.py            
+│
+└── static/
+│    └── custom.css                
+│── app.py                      
+│── config.py                    
+│── requirements.txt
+│── .env                        
+│── extensions.py  
+
+```
+Recife, 10 de Outubro de 2025
 
 Atividades: Prof° **Jose Mauricio Matapi da Silva** 
 

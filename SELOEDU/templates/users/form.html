@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}{{ 'Editar usuário' if user else 'Novo usuário' }} - SELOEDU{% endblock %}
+
+{% block content %}
+  <div class="login-container">
+    <h2 class="users-header">{{ 'Editar usuário' if user else 'Novo usuário' }}</h2>
+
+    <form method="post" style="width:100%">
+      <div class="input-group">
+        <label>Nome</label>
+        <input type="text" name="nome" value="{{ user.nome if user else (form_data.nome if form_data else '') }}" required>
+      </div>
+
+      <div class="input-group">
+        <label>Email</label>
+        <input type="email" name="email" value="{{ user.email if user else (form_data.email if form_data else '') }}" required>
+      </div>
+
+      <div class="input-group">
+        <label>Papel</label>
+        {% set r = user.role if user else (form_data.role if form_data else 'aluno') %}
+        <select name="role">
+          <option value="aluno" {{ 'selected' if r == 'aluno' else '' }}>Aluno</option>
+          {% if current_user.is_authenticated and current_user.role != 'coordenador' %}
+            <option value="coordenador" {{ 'selected' if r == 'coordenador' else '' }}>Coordenador</option>
+          {% endif %}
+        </select>
+      </div>
+
+      <div class="input-group">
+        <label>Senha</label>
+        <input type="password" name="password" {% if not user %}required{% endif %} minlength="6">
+        {% if user %}
+          <small>Deixe em branco para manter a senha atual.</small>
+        {% endif %}
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn-small">Salvar</button>
+        <a href="{{ url_for('users.index') }}" class="btn-small no-underline">Voltar</a>
+      </div>
+    </form>
+  </div>
+{% endblock %}

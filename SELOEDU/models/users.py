@@ -1,6 +1,6 @@
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
-from models.extensions import db, login_manager
+from extensions import db, login_manager
 
 
 class User(UserMixin, db.Model):
@@ -10,6 +10,7 @@ class User(UserMixin, db.Model):
 	email = db.Column(db.String(150), unique=True, nullable=False)
 	password_hash = db.Column(db.String(256), nullable=True)
 	role = db.Column(db.String(50), default='user')
+	ativo = db.Column(db.Boolean, default=True)
 
 	def set_password(self, password: str):
 		self.password_hash = generate_password_hash(password)
@@ -21,6 +22,7 @@ class User(UserMixin, db.Model):
 
 	def get_id(self):
 		return str(self.id)
+
 
 
 @login_manager.user_loader
