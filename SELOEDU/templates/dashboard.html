@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="dashboard-container">
+    <div class="dashboard-welcome">
+        <p>Bem-vindo, {{ current_user.email if current_user.is_authenticated else 'Usuário' }}!</p>
+    </div>
+</div>
+{% endblock %}

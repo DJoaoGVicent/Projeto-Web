@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Login - SELOEDU{% endblock %}
+{% block content %}
+<div class="login-container">
+    <h2>Login</h2>
+    <form action="{{ url_for('auth.login') }}" method="POST" style="width:100%;">
+        <div class="input-group">
+            <label for="email">E-mail</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+        <div class="input-group">
+            <label for="password">Senha</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <button type="submit" class="button-login">Entrar</button>
+    </form>
+</div>
+{% endblock %}

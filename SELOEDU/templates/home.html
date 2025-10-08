@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}Home - SELOEDU{% endblock %}
+{% block content %}
+<div class="home-container">
+    <h1>Bem-vindo ao SELOEDU</h1>
+    <p>Seu gerenciador de aplicação de treinamentos.</p>
+    <p>Faça login para acessar o painel.</p>
+    <div class="button-wrapper">
+    <button class="button-home" onclick="window.location.href='{{ url_for('auth.login') }}'">Entrar</button>
+    </div>
+</div>
+{% endblock %}

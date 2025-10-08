@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}SELOEDU{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='custom.css') }}">
+</head>
+<body>
+    {% if current_user.is_authenticated %}
+    <header>
+        <nav>
+            <a href="{{ url_for('users.dashboard') }}">Dashboard</a> |
+            <a href="{{ url_for('users.users') }}">Usuários</a> |
+            <a href="{{ url_for('auth.logout') }}">Sair</a>
+        </nav>
+    </header>
+    {% endif %}
+
+    <main>
+        <!-- Mensagens Flash -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="messages-container">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        
+        <!-- Conteúdo específico da página -->
+        {% block content %}{% endblock %}
+    </main> 
+
+    <footer>
+        <p>SELOEDU © 2025</p>
+    </footer>
+</body>
+</html>
