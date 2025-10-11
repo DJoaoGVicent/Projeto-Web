@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}Perfil do Usuário{% endblock %}
+{% block content %}
+<div class="users-container">
+    <h1 class="users-header">Meu Perfil</h1>
+    <form method="post" enctype="multipart/form-data">
+        <div class="input-group">
+            <label for="telefone">Telefone:</label>
+            <input type="text" id="telefone" name="telefone" value="{{ profile.telefone if profile else '' }}">
+        </div>
+        <div class="input-group">
+            <label for="instituicao">Instituição:</label>
+            <input type="text" id="instituicao" name="instituicao" value="{{ profile.instituicao if profile else '' }}">
+        </div>
+        <div class="input-group">
+            <label for="cargo">Cargo:</label>
+            <input type="text" id="cargo" name="cargo" value="{{ profile.cargo if profile else '' }}">
+        </div>
+        <div class="input-group">
+            <label for="foto">Foto:</label>
+            <input type="file" id="foto" name="foto">
+            {% if profile and profile.foto %}
+                <img src="{{ url_for('static', filename=profile.foto) }}" alt="Foto do perfil" style="max-width: 150px; display: block; margin-top: 10px;">
+            {% endif %}
+        </div>
+        <div class="input-group">
+            <label for="bio">Bio:</label>
+            <textarea id="bio" name="bio" rows="4">{{ profile.bio if profile else '' }}</textarea>
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="button-home">Salvar Alterações</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

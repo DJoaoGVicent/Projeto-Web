@@ -200,7 +200,7 @@ seloedu/
 │── extensions.py  
 
 ```
-Recife, 10 de Outubro de 2025
+Recife, 08 de Outubro de 2025
 
 Atividades: Prof° **Jose Mauricio Matapi da Silva** 
 

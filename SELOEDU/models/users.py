@@ -12,6 +12,8 @@ class User(UserMixin, db.Model):
 	role = db.Column(db.String(50), default='user')
 	ativo = db.Column(db.Boolean, default=True)
 
+	profile = db.relationship('Profile', uselist=False, back_populates='user')
+
 	def set_password(self, password: str):
 		self.password_hash = generate_password_hash(password)
 

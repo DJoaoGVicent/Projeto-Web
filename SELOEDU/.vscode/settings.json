@@ -1,0 +1,12 @@
+{
+  "sqltools.connections": [
+    {
+      "name": "seloedu (sqlite)",
+      "driver": "SQLite",
+      "preview": true,
+      "database": "${workspaceFolder}/instance/seloedu.db",
+      "readonly": false
+    }
+  ],
+  "sqltools.autoConnect": false
+}
