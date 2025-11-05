@@ -1,6 +1,7 @@
 from flask import Flask, render_template
 from routes.users import user_bp
 from routes.auth import auth_bp
+from routes.treinamento import treinamento_bp
 from extensions import db, login_manager, mail
 from models.users import User
 from config import DevelopmentConfig
@@ -17,6 +18,7 @@ mail.init_app(app)
 # register users under /users
 app.register_blueprint(user_bp, url_prefix='/users')
 app.register_blueprint(auth_bp, url_prefix='/auth')
+app.register_blueprint(treinamento_bp, url_prefix='/treinamentos')
 
 
 @app.route('/')

@@ -15,6 +15,7 @@ user_bp.route('/<int:user_id>', endpoint='show', methods=['GET'])(user_view.view
 user_bp.route('/<int:user_id>/edit', endpoint='edit', methods=['GET', 'POST'])(user_view.edit_user)
 user_bp.route('/<int:user_id>/delete', endpoint='delete', methods=['POST'])(user_view.delete_user)
 user_bp.route('/profile', endpoint='profile', methods=['GET', 'POST'])(profile)
+user_bp.route('/profile/<int:user_id>', endpoint='profile_user', methods=['GET', 'POST'])(profile)
 
 @user_bp.route('/settings', endpoint='settings')
 @login_required

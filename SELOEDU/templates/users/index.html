@@ -6,7 +6,9 @@
   <div class="users-container">
     <h2 class="users-header">Usuários</h2>
 
-    <p><a class="button-home no-underline" href="{{ url_for('users.create') }}">+ Novo usuário</a></p>
+    {% if current_user.is_authenticated and current_user.role == 'master' %}
+      <p><a class="button-home no-underline" href="{{ url_for('users.create') }}">+ Novo usuário</a></p>
+    {% endif %}
 
     {% if usuarios %}
       <table>
@@ -28,12 +30,16 @@
               <td>{{ u.role }}</td>
               <td class="actions">
                 <div class="action-group">
-                  <form action="{{ url_for('users.edit', user_id=u.id) }}" method="get" style="margin:0;display:inline-flex;">
-                    <button type="submit" class="btn-small">Editar</button>
-                  </form>
-                  <form action="{{ url_for('users.delete', user_id=u.id) }}" method="post" style="margin:0;display:inline-flex;">
-                    <button type="submit" class="btn-small">Excluir</button>
-                  </form>
+                  {% if current_user.is_authenticated and (current_user.role == 'master' or current_user.id == u.id) %}
+                    <form action="{{ url_for('users.edit', user_id=u.id) }}" method="get" style="margin:0;display:inline-flex;">
+                      <button type="submit" class="btn-small">Editar</button>
+                    </form>
+                  {% endif %}
+                  {% if current_user.is_authenticated and current_user.role == 'master' %}
+                    <form action="{{ url_for('users.delete', user_id=u.id) }}" method="post" style="margin:0;display:inline-flex;">
+                      <button type="submit" class="btn-small">Excluir</button>
+                    </form>
+                  {% endif %}
                 </div>
               </td>
             </tr>

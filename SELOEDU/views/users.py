@@ -1,16 +1,20 @@
 from flask import render_template, request, redirect, url_for, flash, jsonify
+from flask_login import login_required, current_user
 from models.users import User
 from extensions import db
 
 
+@login_required
 def dashboard():
     return render_template('dashboard.html')
 
 
+@login_required
 def settings():
     return render_template('dashboard.html')  # temporario
 
 class UserView:
+    @login_required
     def list_users(self):
         """Listar todos os usuários"""
         try:
@@ -21,8 +25,12 @@ class UserView:
             flash(f'Erro ao carregar usuários: {str(e)}', 'error')
             return render_template('users/index.html', usuarios=[])
     
+    @login_required
     def create_user(self):
         """Criar novo usuário"""
+        if current_user.role != 'master':
+            flash('Apenas administradores (master) podem criar usuários.', 'danger')
+            return redirect(url_for('users.index'))
         if request.method == 'POST':
             try:
                 nome = request.form.get('nome')
@@ -64,6 +72,7 @@ class UserView:
 
         return render_template('users/form.html')
     
+    @login_required
     def view_user(self, user_id):
         """Visualizar usuário específico"""
         try:
@@ -73,15 +82,22 @@ class UserView:
             flash(f'Erro ao carregar usuário: {str(e)}', 'error')
             return redirect(url_for('users.index'))
     
+    @login_required
     def edit_user(self, user_id):
         """Editar usuário"""
         user = User.query.get_or_404(user_id)
+        # Somente master pode editar outros usuários; o próprio usuário pode editar a si mesmo
+        if current_user.role != 'master' and current_user.id != user.id:
+            flash('Apenas administradores (master) podem editar outros usuários.', 'danger')
+            return redirect(url_for('users.show', user_id=user.id))
         
         if request.method == 'POST':
             try:
                 user.nome = request.form.get('nome', user.nome)
                 user.email = request.form.get('email', user.email)
-                user.role = request.form.get('role', user.role)
+                # Apenas master pode alterar papel
+                if current_user.role == 'master':
+                    user.role = request.form.get('role', user.role)
 
                 password = request.form.get('password')
                 if password:
@@ -97,8 +113,12 @@ class UserView:
 
         return render_template('users/form.html', user=user)
     
+    @login_required
     def delete_user(self, user_id):
         """Excluir usuário (soft delete)"""
+        if current_user.role != 'master':
+            flash('Apenas administradores (master) podem excluir usuários.', 'danger')
+            return redirect(url_for('users.index'))
         try:
             user = User.query.get_or_404(user_id)
             user.ativo = False

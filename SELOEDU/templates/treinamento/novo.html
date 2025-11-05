@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Novo Treinamento{% endblock %}
+{% block content %}
+<h1>Novo Treinamento</h1>
+
+<form method="post" action="{{ url_for('treinamento.novo') }}">
+  <div>
+    <label for="titulo">Título</label>
+    <input type="text" id="titulo" name="titulo" value="{{ form_data.titulo if form_data else '' }}">
+  </div>
+  <div>
+    <label for="descricao">Descrição</label>
+    <textarea id="descricao" name="descricao">{{ form_data.descricao if form_data else '' }}</textarea>
+  </div>
+  <div>
+    <label for="data_inicio">Data início</label>
+    <input type="date" id="data_inicio" name="data_inicio" value="{{ form_data.data_inicio if form_data else '' }}">
+  </div>
+  <div>
+    <label for="data_fim">Data fim</label>
+    <input type="date" id="data_fim" name="data_fim" value="{{ form_data.data_fim if form_data else '' }}">
+  </div>
+  <div>
+    <button type="submit">Salvar</button>
+    <a href="{{ url_for('treinamento.listar') }}">Cancelar</a>
+  </div>
+ </form>
+{% endblock %}
+
+

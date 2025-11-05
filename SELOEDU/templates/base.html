@@ -6,32 +6,42 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='custom.css') }}">
 </head>
 <body>
-    {% if current_user.is_authenticated %}
-    <header>
-        <nav>
-            <a href="{{ url_for('users.dashboard') }}">Dashboard</a> |
-            <a href="{{ url_for('users.index') }}">Usuários</a> |
-            <a href="{{ url_for('users.profile') }}">Editar perfil</a> |
-            <a href="{{ url_for('auth.logout') }}">Sair</a>
-        </nav>
-    </header>
-    {% endif %}
+    <div class="layout" id="app-layout">
+        {% if current_user.is_authenticated %}
+        <aside id="sidebar">
+            <div style="display:flex; align-items:center; justify-content:flex-start; margin-bottom:8px;">
+                <h2>SELOEDU</h2>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="{{ url_for('users.dashboard') }}">Início</a></li>
+                    <li><a href="{{ url_for('users.index') }}">Usuários</a></li>
+                    <li><a href="{{ url_for('treinamento.listar') }}">Treinamentos</a></li>
+                    <li><a href="{{ url_for('users.profile') }}">Meu Perfil</a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <p>{{ current_user.nome }}</p>
+                <ul>
+                    <li><a href="{{ url_for('auth.logout') }}">Sair</a></li>
+                </ul>
+            </div>
+        </aside>
+        {% endif %}
 
-    <main>
-        <!-- Mensagens Flash -->
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                <div class="messages-container">
-                    {% for category, message in messages %}
-                        <div class="alert alert-{{ category }}">{{ message }}</div>
-                    {% endfor %}
-                </div>
-            {% endif %}
-        {% endwith %}
-        
-        <!-- Conteúdo específico da página -->
-        {% block content %}{% endblock %}
-    </main> 
+        <main>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="messages-container">
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}">{{ message }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+            {% block content %}{% endblock %}
+        </main>
+    </div>
 
     <footer>
         <p>SELOEDU © 2025</p>

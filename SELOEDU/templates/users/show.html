@@ -6,15 +6,20 @@
   <div class="users-container">
     <h2 class="users-header" style="color:#0a4fe0;">Detalhes do Usuário</h2>
     <div style="max-width:600px; margin:0 auto;">
+      {% if user.profile and user.profile.foto %}
+        <div style="margin-bottom:16px; display:flex; justify-content:center;">
+          <img src="{{ url_for('static', filename='uploads/' ~ user.profile.foto) }}" alt="Foto do usuário" style="width:200px; height:200px; object-fit:cover; border-radius:50%;">
+        </div>
+      {% endif %}
       <p><strong>ID:</strong> {{ user.id }}</p>
       <p><strong>Nome:</strong> {{ user.nome }}</p>
       <p><strong>Email:</strong> {{ user.email }}</p>
       <p><strong>Papel:</strong> {{ user.role }}</p>
 
       <div class="form-actions">
-        <form action="{{ url_for('users.edit', user_id=user.id) }}" method="get" style="display:inline">
-          <button type="submit" class="btn-small no-underline">Editar</button>
-        </form>
+        {% if current_user.is_authenticated and (current_user.id == user.id or current_user.role == 'master') %}
+          <a href="{{ url_for('users.profile_user', user_id=user.id) }}" class="btn-small no-underline">Editar Perfil</a>
+        {% endif %}
         <a href="{{ url_for('users.index') }}" class="btn-small no-underline">Voltar</a>
       </div>
     </div>
