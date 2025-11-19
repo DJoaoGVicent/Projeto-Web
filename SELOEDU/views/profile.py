@@ -17,6 +17,11 @@ def profile(user_id=None):
 
     subject_user = User.query.get_or_404(target_user_id)
     profile = Profile.query.filter_by(user_id=target_user_id).first()
+    def redirect_current_context():
+        if user_id is not None:
+            return redirect(url_for('users.profile_user', user_id=target_user_id))
+        return redirect(url_for('users.profile'))
+
     if request.method == 'POST':
         telefone = request.form.get('telefone')
         instituicao = request.form.get('instituicao')
@@ -40,29 +45,37 @@ def profile(user_id=None):
             allowed = current_app.config.get('ALLOWED_IMAGE_EXTENSIONS', {"png","jpg","jpeg","gif"})
             if ext not in allowed:
                 flash('Formato de imagem não permitido.', 'warning')
-                return redirect(url_for('users.profile'))
+                return redirect_current_context()
 
-            old_filename = profile.foto if getattr(profile, 'foto', None) else None
+            old_filename = profile.foto
+            old_thumb = profile.foto_thumb
             saved_filename, thumb_filename = save_image(file_storage=foto, user_name=subject_user.nome)
             if not saved_filename and not thumb_filename:
                 flash('Não foi possível salvar a imagem.', 'danger')
-                return redirect(url_for('users.profile'))
+                return redirect_current_context()
 
             # Se for GIF, usar o arquivo original para preservar animação; senão preferir thumbnail
             is_gif = (saved_filename or '').lower().endswith('.gif')
-            profile.foto = (saved_filename if is_gif else (thumb_filename or saved_filename))
+            if is_gif:
+                profile.foto = saved_filename
+                profile.foto_thumb = None
+            else:
+                profile.foto = saved_filename
+                profile.foto_thumb = thumb_filename
 
             # limpar arquivos antigos
             if old_filename:
                 try:
                     remove_file_safe(old_filename)
-                    remove_file_safe(f"thumb_{old_filename}")
+                except Exception:
+                    pass
+            if old_thumb:
+                try:
+                    remove_file_safe(old_thumb)
                 except Exception:
                     pass
         db.session.commit()
         flash('Perfil atualizado com sucesso!', 'success')
         # redireciona permanecendo na página correta (self ou outro)
-        if user_id is not None:
-            return redirect(url_for('users.profile_user', user_id=target_user_id))
-        return redirect(url_for('users.profile'))
+        return redirect_current_context()
     return render_template('users/profile.html', profile=profile, subject_user=subject_user)

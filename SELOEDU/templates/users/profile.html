@@ -4,7 +4,7 @@
 {% block content %}
 <h1>Perfil | {{ (subject_user.nome if subject_user and subject_user.nome else (current_user.nome if current_user and current_user.nome else '')) }}</h1>
 
-<form method="post" action="{{ url_for('users.profile') }}" enctype="multipart/form-data">
+<form method="post" action="{% if subject_user and subject_user.id %}{{ url_for('users.profile_user', user_id=subject_user.id) }}{% else %}{{ url_for('users.profile') }}{% endif %}" enctype="multipart/form-data">
   {% if form %}
     {{ form.hidden_tag() }}
   {% endif %}
@@ -15,7 +15,10 @@
       <div id="photo-box"
            style="width:200px; height:200px; border-radius:50%; overflow:hidden; background:#ddd; display:flex; align-items:center; justify-content:center; cursor:pointer;"
            title="Clique para alterar a foto">
-        {% if profile and profile.foto %}
+        {% if profile and profile.foto_thumb %}
+          <img id="current-photo" src="{{ url_for('static', filename='uploads/' ~ profile.foto_thumb) }}"
+               alt="Foto atual" style="width:200px; height:200px; object-fit:cover; display:block;">
+        {% elif profile and profile.foto %}
           <img id="current-photo" src="{{ url_for('static', filename='uploads/' ~ profile.foto) }}"
                alt="Foto atual" style="width:200px; height:200px; object-fit:cover; display:block;">
         {% else %}

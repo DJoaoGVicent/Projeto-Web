@@ -1,6 +1,6 @@
-from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
-from extensions import db, login_manager
+from extensions import db, login_manager, bcrypt
+from werkzeug.security import check_password_hash as werkzeug_check_password_hash
 
 
 class User(UserMixin, db.Model):
@@ -21,12 +21,20 @@ class User(UserMixin, db.Model):
 	)
 
 	def set_password(self, password: str):
-		self.password_hash = generate_password_hash(password)
+		self.password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
 
 	def check_password(self, password: str) -> bool:
 		if not self.password_hash:
 			return False
-		return check_password_hash(self.password_hash, password)
+		if self.password_hash.startswith('pbkdf2:'):
+			return werkzeug_check_password_hash(self.password_hash, password)
+		if self.password_hash.startswith(('$2a$', '$2b$', '$2y$')):
+			try:
+				return bcrypt.check_password_hash(self.password_hash, password)
+			except ValueError:
+				return False
+		# fallback attempt for outros formatos legados
+		return werkzeug_check_password_hash(self.password_hash, password)
 
 	def get_id(self):
 		return str(self.id)

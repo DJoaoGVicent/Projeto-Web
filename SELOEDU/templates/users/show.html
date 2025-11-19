@@ -6,7 +6,11 @@
   <div class="users-container">
     <h2 class="users-header" style="color:#0a4fe0;">Detalhes do Usuário</h2>
     <div style="max-width:600px; margin:0 auto;">
-      {% if user.profile and user.profile.foto %}
+      {% if user.profile and user.profile.foto_thumb %}
+        <div style="margin-bottom:16px; display:flex; justify-content:center;">
+          <img src="{{ url_for('static', filename='uploads/' ~ user.profile.foto_thumb) }}" alt="Foto do usuário" style="width:200px; height:200px; object-fit:cover; border-radius:50%;">
+        </div>
+      {% elif user.profile and user.profile.foto %}
         <div style="margin-bottom:16px; display:flex; justify-content:center;">
           <img src="{{ url_for('static', filename='uploads/' ~ user.profile.foto) }}" alt="Foto do usuário" style="width:200px; height:200px; object-fit:cover; border-radius:50%;">
         </div>
